@@ -1,0 +1,13 @@
+/home/jafioti/Documents/canvas_task_handler/target/debug/deps/indexmap-41c5c21f0713944d.rmeta: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/macros.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/equivalent.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/mutable_keys.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/util.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core/raw.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/set.rs
+
+/home/jafioti/Documents/canvas_task_handler/target/debug/deps/indexmap-41c5c21f0713944d.d: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/macros.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/equivalent.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/mutable_keys.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/util.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core/raw.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/set.rs
+
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/lib.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/macros.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/equivalent.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/mutable_keys.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/util.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/map/core/raw.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/indexmap-1.7.0/src/set.rs:

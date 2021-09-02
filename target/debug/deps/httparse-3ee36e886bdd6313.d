@@ -1,0 +1,12 @@
+/home/jafioti/Documents/canvas_task_handler/target/debug/deps/httparse-3ee36e886bdd6313.rmeta: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/iter.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/macros.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/mod.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/sse42.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/avx2.rs
+
+/home/jafioti/Documents/canvas_task_handler/target/debug/deps/libhttparse-3ee36e886bdd6313.rlib: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/iter.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/macros.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/mod.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/sse42.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/avx2.rs
+
+/home/jafioti/Documents/canvas_task_handler/target/debug/deps/httparse-3ee36e886bdd6313.d: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/iter.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/macros.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/mod.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/sse42.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/avx2.rs
+
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/lib.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/iter.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/macros.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/mod.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/sse42.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/httparse-1.5.1/src/simd/avx2.rs:

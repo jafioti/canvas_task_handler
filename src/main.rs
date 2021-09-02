@@ -1,4 +1,3 @@
-#![windows_subsystem="windows"] // Hide the console
 extern crate reqwest;
 use serde_json::{Value, json};
 use chrono::{Datelike, Utc, DateTime};
@@ -16,9 +15,8 @@ async fn main() {
     let canvas_client = reqwest::Client::new();
 
     // Get courses for the current semester
-    let mut course_json = send_request("https://canvas.instructure.com/api/v1/courses?include[]=total_scores", RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await;
+    let mut course_json = send_request("https://canvas.instructure.com/api/v1/courses?per_page=100", RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await;
     for i in (0..course_json.len()).rev() {
-        println!("Starting At: {}", course_json[i]["course_code"].to_string());
         let start_date = match DateTime::parse_from_rfc3339(&course_json[i]["start_at"].to_string().replace('"', "")) {
             Ok(date) => date,
             Err(_) => {
@@ -30,6 +28,11 @@ async fn main() {
             course_json.remove(i);
         }
     }
+
+    for course in &course_json {
+        println!("Course: {}", get_short_class_name(&course["course_code"].to_string()));
+    }
+
 
     // Load log file if it exists, else create it
     if !Path::new("canvas_assignments.txt").exists() {
@@ -93,7 +96,11 @@ fn get_short_class_name(class_name: &str) -> &str {
     for i in 0..class_name.len() {
         let character = class_name.chars().nth(i).unwrap();
         if character == ':' || character == ',' || (i > 0 && class_name.chars().nth(i - 1).unwrap().is_digit(10) && !character.is_digit(10)){
-            return &class_name[..i];
+            return if class_name[..i].replace('"', "") == "Section Merge" {
+                &class_name[i+2..]
+            } else {
+                &class_name[..i]
+            };
         }
     }
     class_name
