@@ -1,0 +1,11 @@
+/home/jafioti/Documents/Other Crates/canvas_task_handler/target/debug/deps/serde_urlencoded-dd39ab8eac8d7625.rmeta: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/de.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/mod.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/key.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/pair.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/part.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/value.rs
+
+/home/jafioti/Documents/Other Crates/canvas_task_handler/target/debug/deps/serde_urlencoded-dd39ab8eac8d7625.d: /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/lib.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/de.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/mod.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/key.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/pair.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/part.rs /home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/value.rs
+
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/lib.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/de.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/mod.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/key.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/pair.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/part.rs:
+/home/jafioti/.cargo/registry/src/github.com-1ecc6299db9ec823/serde_urlencoded-0.7.0/src/ser/value.rs:

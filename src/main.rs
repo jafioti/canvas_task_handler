@@ -1,12 +1,22 @@
 extern crate reqwest;
+#[macro_use] extern crate serde;
 use serde_json::{Value, json};
+use serde::{Serialize};
 use chrono::{Datelike, Utc, DateTime};
-use std::{fs, fs::File, io, io::BufRead, path::Path};
+use std::{collections::HashMap, fs, fs::File, path::Path};
 
 #[derive(PartialEq)]
 enum RequestType {
     Get,
-    Post
+    Post,
+    Delete
+}
+
+#[derive(Serialize, Deserialize)]
+struct Assignment {
+    id: String,
+    title: String,
+    due_date: String,
 }
 
 #[tokio::main]
@@ -15,7 +25,9 @@ async fn main() {
     let canvas_client = reqwest::Client::new();
 
     // Get courses for the current semester
-    let mut course_json = send_request("https://canvas.instructure.com/api/v1/courses?per_page=100", RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await;
+    let mut course_json = send_request("https://canvas.instructure.com/api/v1/courses?per_page=100", RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await
+        .expect("Failed to get courses!");
+    let course_json = course_json.as_array_mut().unwrap();
     for i in (0..course_json.len()).rev() {
         let start_date = match DateTime::parse_from_rfc3339(&course_json[i]["start_at"].to_string().replace('"', "")) {
             Ok(date) => date,
@@ -29,22 +41,13 @@ async fn main() {
         }
     }
 
-    for course in &course_json {
-        println!("Course: {}", get_short_class_name(&course["course_code"].to_string()));
-    }
-
-
     // Load log file if it exists, else create it
     if !Path::new("canvas_assignments.txt").exists() {
         File::create("canvas_assignments.txt").expect("Failed to create file!");
     }
-    let mut prev_assignments: Vec<u64> = vec![];
-    if let Ok(lines) = read_lines("canvas_assignments.txt") {
-        for line in lines.flatten() {
-            if let Ok(id) = line.parse() { 
-                prev_assignments.push(id);
-            }
-        }
+    let mut prev_assignments: HashMap<String, Assignment> = HashMap::new();
+    if let Ok(content) = fs::read_to_string("canvas_assignments.txt") {
+        prev_assignments = serde_json::from_str(&content).unwrap();
     }
 
     // Get assignments from those courses
@@ -53,7 +56,7 @@ async fn main() {
         let assignments = send_request(&format!("https://canvas.instructure.com/api/v1/courses/{}/assignments?page=1&per_page=100", course["id"]), RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await;
         for assignment in assignments {
             // Check if the assignment is in the log file
-            if !prev_assignments.contains(match &assignment["id"].to_string().parse(){ Ok(id) => id, Err(_) => &0}) {
+            if !prev_assignments.contains_key(&assignment["id"].to_string()) || prev_assignments[&assignment["id"].to_string()].due_date != assignment["due_at"].to_string() {
                 // Send assignment to todoist
                 // Setup body (task name, date string)
                 let task_name = format!("{class} {assignment}", class=get_short_class_name(&course["name"].to_string().replace('"', "")), assignment=assignment["name"].to_string().replace('"', "").replace("\\", ""));
@@ -62,33 +65,35 @@ async fn main() {
                     Err(_) => continue,
                 };
                 let body = json!({
-                    "content": task_name,
+                    "content": &task_name,
                     "due_string": format!("{year}-{month}-{day}", year=date.year(), month=date.month(), day=date.day())
                 });
                 // Send
                 send_request("https://api.todoist.com/rest/v1/tasks", RequestType::Post, &todoist_client, "ed8089f6e191cdb714dad5a0de15ae95786b8b3f", vec![], Some(body)).await;
                 // Add assignment to previous assignments
-                prev_assignments.push(assignment["id"].to_string().parse().unwrap());
+                let new_assignment = Assignment {
+                    id: assignment["id"].to_string().replace('"', ""),
+                    title: assignment["name"].to_string().replace('"', ""),
+                    due_date: assignment["due_at"].to_string().replace('"', ""),
+                };
+                match prev_assignments.get_mut(&new_assignment.id) {
+                    Some(past_assignment) => {
+                        // Delete old assignment
+                        send_request(&format!("https://api.todoist.com/rest/v1/tasks/{}", past_assignment.id), RequestType::Delete, &todoist_client, "ed8089f6e191cdb714dad5a0de15ae95786b8b3f", vec![], None).await;
+                        // Change date
+                        past_assignment.due_date = assignment["due_at"].to_string().replace('"', "");
+                    },
+                    None => {prev_assignments.insert(new_assignment.id.clone(), new_assignment);},
+                }
             }
         };
     };
 
-    // Save previous assignments to file    
-    let mut joined_assignments = String::new();
-    for i in 0..prev_assignments.len() {
-        joined_assignments.push_str(&prev_assignments[i].to_string());
-        if i < prev_assignments.len() - 1 {joined_assignments.push('\n');}
-    }
-    match fs::write("canvas_assignments.txt", joined_assignments) {
+    // Save previous assignments to file
+    match fs::write("canvas_assignments.txt", serde_json::to_string(&prev_assignments).expect("Failed to serialize assignments")) {
         Ok(_) => {},
         Err(error) => panic!("Failed to write to save file: {}", error),
     }
-}
-
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where P: AsRef<Path>, {
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
 }
 
 
@@ -106,10 +111,11 @@ fn get_short_class_name(class_name: &str) -> &str {
     class_name
 }
 
-async fn send_request(url: &str, request_type: RequestType, client: &reqwest::Client, bearer_token: &str, headers: Vec<(String, String)>, body: Option<Value>) -> Vec<Value> {
+async fn send_request(url: &str, request_type: RequestType, client: &reqwest::Client, bearer_token: &str, headers: Vec<(String, String)>, body: Option<Value>) -> Option<Value> {
     let mut request_builder = match request_type {
         RequestType::Get => client.get(url),
         RequestType::Post => client.post(url),
+        RequestType::Delete => client.delete(url),
     };
 
     // Add headers
@@ -125,9 +131,9 @@ async fn send_request(url: &str, request_type: RequestType, client: &reqwest::Cl
 
     let response = request_builder.send().await.expect("Failed to send request!");
 
-    if request_type != RequestType::Get {return vec![];} 
+    if request_type != RequestType::Get {return None;} 
     match serde_json::from_str(&response.text().await.expect("Failed to parse response into string!")) {
         Ok(json) => json,
-        Err(_) => vec![]
+        Err(_) => None
     }
 }
