@@ -2,17 +2,17 @@ extern crate reqwest;
 #[macro_use] extern crate serde;
 use serde_json::{Value, json};
 use serde::{Serialize};
-use chrono::{Datelike, Utc, DateTime};
+use chrono::{DateTime, Datelike, Duration, Utc};
 use std::{collections::HashMap, fs, fs::File, path::Path};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug)]
 enum RequestType {
     Get,
     Post,
     Delete
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Assignment {
     id: String,
     title: String,
@@ -25,6 +25,7 @@ async fn main() {
     let canvas_client = reqwest::Client::new();
 
     // Get courses for the current semester
+    println!("Getting courses...");
     let mut course_json = send_request("https://canvas.instructure.com/api/v1/courses?per_page=100", RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await
         .expect("Failed to get courses!");
     let course_json = course_json.as_array_mut().unwrap();
@@ -42,28 +43,29 @@ async fn main() {
     }
 
     // Load log file if it exists, else create it
+    println!("Loading previous assignments...");
+    let mut prev_assignments: HashMap<String, Assignment> = HashMap::new();
     if !Path::new("canvas_assignments.txt").exists() {
         File::create("canvas_assignments.txt").expect("Failed to create file!");
-    }
-    let mut prev_assignments: HashMap<String, Assignment> = HashMap::new();
-    if let Ok(content) = fs::read_to_string("canvas_assignments.txt") {
+    } else if let Ok(content) = fs::read_to_string("canvas_assignments.txt") {
         prev_assignments = serde_json::from_str(&content).unwrap();
     }
 
     // Get assignments from those courses
+    println!("Running through new assignments...");
     let todoist_client = reqwest::Client::new();
     for course in course_json {
-        let assignments = send_request(&format!("https://canvas.instructure.com/api/v1/courses/{}/assignments?page=1&per_page=100", course["id"]), RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await;
-        for assignment in assignments {
+        let assignments = send_request(&format!("https://canvas.instructure.com/api/v1/courses/{}/assignments?page=1&per_page=100", course["id"]), RequestType::Get, &canvas_client, "1050~5g3LDgBZVnGv5H8mTi0tleLlBt9pRu7861LRkEZ8e93PAoKBHWq8KtIy0YM0uYmk", vec![], None).await.unwrap();
+        for assignment in assignments.as_array().unwrap() {
             // Check if the assignment is in the log file
-            if !prev_assignments.contains_key(&assignment["id"].to_string()) || prev_assignments[&assignment["id"].to_string()].due_date != assignment["due_at"].to_string() {
+            if !prev_assignments.contains_key(&assignment["id"].to_string()) || prev_assignments[&assignment["id"].to_string()].due_date != assignment["due_at"] {
                 // Send assignment to todoist
                 // Setup body (task name, date string)
                 let task_name = format!("{class} {assignment}", class=get_short_class_name(&course["name"].to_string().replace('"', "")), assignment=assignment["name"].to_string().replace('"', "").replace("\\", ""));
                 let date = match DateTime::parse_from_rfc3339(&assignment["due_at"].to_string().replace('"', "")) {
                     Ok(date) => date,
                     Err(_) => continue,
-                };
+                } - Duration::hours(5); // Remove 5 hours to stop weird "next-day" glitch
                 let body = json!({
                     "content": &task_name,
                     "due_string": format!("{year}-{month}-{day}", year=date.year(), month=date.month(), day=date.day())
@@ -90,6 +92,7 @@ async fn main() {
     };
 
     // Save previous assignments to file
+    println!("Saving new assignments...");
     match fs::write("canvas_assignments.txt", serde_json::to_string(&prev_assignments).expect("Failed to serialize assignments")) {
         Ok(_) => {},
         Err(error) => panic!("Failed to write to save file: {}", error),
