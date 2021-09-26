@@ -45,9 +45,10 @@ async fn main() {
     // Load log file if it exists, else create it
     println!("Loading previous assignments...");
     let mut prev_assignments: HashMap<String, Assignment> = HashMap::new();
-    if !Path::new("canvas_assignments.txt").exists() {
-        File::create("canvas_assignments.txt").expect("Failed to create file!");
-    } else if let Ok(content) = fs::read_to_string("canvas_assignments.txt") {
+    let path = Path::new("/home/jafioti/other/canvas_task_handler/canvas_assignments.txt");
+    if !path.exists() {
+        File::create(path).expect("Failed to create file!");
+    } else if let Ok(content) = fs::read_to_string(path) {
         prev_assignments = serde_json::from_str(&content).unwrap();
     }
 
@@ -93,7 +94,7 @@ async fn main() {
 
     // Save previous assignments to file
     println!("Saving new assignments...");
-    match fs::write("canvas_assignments.txt", serde_json::to_string(&prev_assignments).expect("Failed to serialize assignments")) {
+    match fs::write(path, serde_json::to_string(&prev_assignments).expect("Failed to serialize assignments")) {
         Ok(_) => {},
         Err(error) => panic!("Failed to write to save file: {}", error),
     }
